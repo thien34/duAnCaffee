@@ -20,7 +20,7 @@ public class NhanVienService implements MethodService<NhanVien> {
     public List<NhanVien> selectBySQL(String sql, Object... args) {
         List<NhanVien> list = new ArrayList<>();
         try {
-            ResultSet rs = JdbcHelper.executeQuery(sql);
+            ResultSet rs = JdbcHelper.executeQuery(sql, args);
             while (rs.next()) {
                 NhanVien nv = NhanVien.builder()
                         .id(rs.getInt("IDNhanVien"))

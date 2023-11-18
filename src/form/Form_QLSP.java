@@ -5,6 +5,7 @@ import entity.SanPhamChiTiet;
 import entity.ThuocTinh;
 import java.awt.HeadlessException;
 import java.io.File;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -28,7 +29,7 @@ public final class Form_QLSP extends javax.swing.JPanel {
         loadData();
         loadDataJcombox();
         loadDataSanPham();
-        loadDataSPCT();
+        loadDataSPCT(cTService.getAll());
     }
 
     private void mouseClickSanPham(int row) {
@@ -86,12 +87,12 @@ public final class Form_QLSP extends javax.swing.JPanel {
         jButton10.setEnabled(false);
     }
 
-    void loadDataSPCT() {
+    void loadDataSPCT(List<SanPhamChiTiet> list) {
         jTextField5.setEnabled(false);
         jTextField6.setEnabled(false);
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         model.setRowCount(0);
-        for (SanPhamChiTiet o : cTService.getAll()) {
+        for (SanPhamChiTiet o : list) {
             ThuocTinh khoiLuong = thuocTinhService.getThuocTinhById(o.getIdKhoiLuong(), "KhoiLuong");
             ThuocTinh dorang = thuocTinhService.getThuocTinhById(o.getIdDoRang(), "DoRang");
             ThuocTinh huongVi = thuocTinhService.getThuocTinhById(o.getIdHuongVi(), "HuongVi");
@@ -1109,7 +1110,6 @@ public final class Form_QLSP extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
         jTextField1.setText("");
         jTextField2.setText("");
         jTextField4.setText("");
@@ -1123,6 +1123,8 @@ public final class Form_QLSP extends javax.swing.JPanel {
             jTextField6.setText(jTextField2.getText());
             jTextField5.setEnabled(false);
             jTextField6.setEnabled(false);
+            SanPham sp = sanPhamService.getByMaSP(jTextField1.getText());
+            loadDataSPCT(cTService.getByIDSP(sp.getId()));
         }
 
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -1329,14 +1331,14 @@ public final class Form_QLSP extends javax.swing.JPanel {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         cTService.add(readDataSPCT());
-        loadDataSPCT();
+        loadDataSPCT(cTService.getAll());
         jButton11ActionPerformed(evt);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         SanPhamChiTiet chiTiet = cTService.getAll().get(jTable3.getSelectedRow());
         cTService.update(readDataSPCT(), chiTiet.getId());
-        loadDataSPCT();
+        loadDataSPCT(cTService.getAll());
         jButton11ActionPerformed(evt);
     }//GEN-LAST:event_jButton10ActionPerformed
 
@@ -1352,6 +1354,7 @@ public final class Form_QLSP extends javax.swing.JPanel {
         jButton9.setEnabled(true);
         jButton10.setEnabled(false);
         jLabel16.setIcon(null);
+                loadDataSPCT(cTService.getAll());
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jTable3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable3MouseClicked
