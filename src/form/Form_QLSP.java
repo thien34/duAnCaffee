@@ -4,7 +4,6 @@ import entity.SanPham;
 import entity.SanPhamChiTiet;
 import entity.ThuocTinh;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -88,6 +87,8 @@ public final class Form_QLSP extends javax.swing.JPanel {
     }
 
     void loadDataSPCT() {
+        jTextField5.setEnabled(false);
+        jTextField6.setEnabled(false);
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         model.setRowCount(0);
         for (SanPhamChiTiet o : cTService.getAll()) {
@@ -1030,7 +1031,7 @@ public final class Form_QLSP extends javax.swing.JPanel {
         });
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(0, 204, 255));
+        jLabel12.setForeground(new java.awt.Color(0, 102, 51));
         jLabel12.setText("Thông Tin Thuộc Tính");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -1340,6 +1341,8 @@ public final class Form_QLSP extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        jTextField5.setText("");
+        jTextField6.setText("");
         jTextField7.setText("");
         jTextField8.setText("");
         jTextField9.setText("");
@@ -1348,6 +1351,7 @@ public final class Form_QLSP extends javax.swing.JPanel {
         jComboBox9.setSelectedIndex(-1);
         jButton9.setEnabled(true);
         jButton10.setEnabled(false);
+        jLabel16.setIcon(null);
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jTable3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable3MouseClicked

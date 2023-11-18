@@ -40,7 +40,7 @@ public class ItemProduct extends javax.swing.JPanel {
         lbItemName.setText(data.getIdSanPham() + "");
         lbDescription.setText("Độ rang: " + data.getIdDoRang() + "Hương vị: " + data.getIdHuongVi() + "Khối lượng: " + data.getIdKhoiLuong());
         lbBrand.setText(data.getId() + "");
-        DecimalFormat df = new DecimalFormat("$#,##0.00");
+        DecimalFormat df = new DecimalFormat("VND#,##0.00");
         lbPrice.setText(df.format(data.getGia()));
     }
 
@@ -68,6 +68,8 @@ public class ItemProduct extends javax.swing.JPanel {
         lbBrand = new javax.swing.JLabel();
         pic = new com.raven.swing.PictureBox();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
         lbItemName.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         lbItemName.setForeground(new java.awt.Color(76, 76, 76));
         lbItemName.setText("Item Name");
@@ -84,7 +86,7 @@ public class ItemProduct extends javax.swing.JPanel {
         lbBrand.setForeground(new java.awt.Color(76, 76, 76));
         lbBrand.setText("Brand");
 
-        pic.setImage(new javax.swing.ImageIcon(getClass().getResource("/image/img1.png"))); // NOI18N
+        pic.setImage(new javax.swing.ImageIcon(getClass().getResource("/image/coffee(1).png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -110,8 +112,8 @@ public class ItemProduct extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbDescription)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pic, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(pic, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbPrice)
                     .addComponent(lbBrand))

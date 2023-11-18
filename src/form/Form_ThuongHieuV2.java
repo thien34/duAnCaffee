@@ -1,6 +1,7 @@
 package form;
 
 import entity.ThuocTinh;
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -10,21 +11,22 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import services.ThuocTinhService;
 
-public class Form_ThuongHieuV2 extends javax.swing.JPanel {
+public final class Form_ThuongHieuV2 extends javax.swing.JPanel {
 
-    private ThuocTinhService thuocTinhService = new ThuocTinhService();
+    private final ThuocTinhService thuocTinhService = new ThuocTinhService();
 
     public Form_ThuongHieuV2() {
         initComponents();
         loadData();
+        jTable1.setSelectionBackground(new Color(112, 192, 109));
     }
 
     public void loadData() {
         TableCellRenderer buttonRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                if (value instanceof Component) {
-                    return (Component) value;
+                if (value instanceof Component component) {
+                    return component;
                 }
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
@@ -32,7 +34,7 @@ public class Form_ThuongHieuV2 extends javax.swing.JPanel {
 
         JButton updateButton = new JButton("Update");
         JButton deleteButton = new JButton("Delete");
-        updateButton.setBackground(new java.awt.Color(0, 204, 255));
+        updateButton.setBackground(new java.awt.Color(0, 153, 51));
         updateButton.setFont(new java.awt.Font("Segoe UI", 1, 14));
         updateButton.setForeground(new java.awt.Color(255, 255, 255));
 //        deleteButton.setBackground(new java.awt.Color(255, 0, 0));
@@ -59,6 +61,7 @@ public class Form_ThuongHieuV2 extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
+        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -78,6 +81,7 @@ public class Form_ThuongHieuV2 extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setRowHeight(35);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -85,6 +89,7 @@ public class Form_ThuongHieuV2 extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setText("Thêm Mới");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,28 +123,28 @@ public class Form_ThuongHieuV2 extends javax.swing.JPanel {
                 .addGap(32, 32, 32)
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         View_ModalThuongHieu view_ModalThanhPhan = new View_ModalThuongHieu(null);
         view_ModalThanhPhan.setVisible(true);
         view_ModalThanhPhan.setLocationRelativeTo(this);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        // TODO add your handling code here:
-        DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
-        int row = jTable1.getSelectedRow();
-        int id = (int) tm.getValueAt(row, 0);
-        ThuocTinh thuocTinh = thuocTinhService.getThuocTinhById(id, "ThuongHieu");
+        if (evt.getClickCount() == 2) {
+            DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
+            int row = jTable1.getSelectedRow();
+            int id = (int) tm.getValueAt(row, 0);
+            ThuocTinh thuocTinh = thuocTinhService.getThuocTinhById(id, "ThuongHieu");
 
-        View_ModalThuongHieu view_ModalThanhPhan = new View_ModalThuongHieu(thuocTinh);
-        view_ModalThanhPhan.setVisible(true);
-        view_ModalThanhPhan.setLocationRelativeTo(this);
+            View_ModalThuongHieu view_ModalThanhPhan = new View_ModalThuongHieu(thuocTinh);
+            view_ModalThanhPhan.setVisible(true);
+            view_ModalThanhPhan.setLocationRelativeTo(this);
+        }
     }//GEN-LAST:event_jTable1MouseClicked
 
 
