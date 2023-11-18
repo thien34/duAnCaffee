@@ -1,23 +1,25 @@
 package form;
 
-import entity.ModelItem;
+import entity.SanPhamChiTiet;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
-import javax.swing.ImageIcon;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 import org.jdesktop.animation.timing.interpolation.PropertySetter;
+import services.SPCTService;
+import ultis.ImageHelper;
 
 public class Form_BanHang extends javax.swing.JPanel {
-
+    
     private FormHomeUI home;
     private final Animator animator;
     private Point animatePoint;
-    private ModelItem itemSelected;
-
+    private SanPhamChiTiet itemSelected;
+    private final SPCTService cTService = new SPCTService();
+    
     public Form_BanHang() {
         initComponents();
         setBackground(new Color(0, 0, 0, 0));
@@ -34,24 +36,24 @@ public class Form_BanHang extends javax.swing.JPanel {
         animator.setAcceleration(.5f);
         animator.setDeceleration(.5f);
     }
-
+    
     private void init() {
         home = new FormHomeUI();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(home);
         testData();
     }
-
+    
     private void testData() {
-        home.setEvent((Component com, ModelItem item) -> {
+        home.setEvent((Component com, SanPhamChiTiet item) -> {
             if (itemSelected != null) {
-                mainPanel.setImageOld(itemSelected.getImage());
+                mainPanel.setImageOld(ImageHelper.readImg(itemSelected.getAnh()));
             }
             if (itemSelected != item) {
                 if (!animator.isRunning()) {
                     itemSelected = item;
                     animatePoint = getLocationOf(com);
-                    mainPanel.setImage(item.getImage());
+                    mainPanel.setImage(ImageHelper.readImg(item.getAnh()));
                     mainPanel.setImageLocation(animatePoint);
                     mainPanel.setImageSize(new Dimension(180, 120));
                     mainPanel.repaint();
@@ -62,16 +64,19 @@ public class Form_BanHang extends javax.swing.JPanel {
             }
         });
         int ID = 1;
-        for (int i = 0; i <= 5; i++) {
-            home.addItem(new ModelItem(ID++, "SUPERNOVA", "NMD City Stock 2", 150, "Adidas", new ImageIcon(getClass().getResource("/image/img1.png"))));
-            home.addItem(new ModelItem(ID++, "SUPERNOVA", "NMD City Stock 2", 150, "Adidas", new ImageIcon(getClass().getResource("/image/img2.png"))));
-            home.addItem(new ModelItem(ID++, "SUPERNOVA", "NMD City Stock 2", 150, "Adidas", new ImageIcon(getClass().getResource("/image/img3.png"))));
-            home.addItem(new ModelItem(ID++, "Adidas", "NMD City Stock 2", 160, "Adidas", new ImageIcon(getClass().getResource("/image/img4.png"))));
-            home.addItem(new ModelItem(ID++, "Adidas", "NMD City Stock 2", 120, "Adidas", new ImageIcon(getClass().getResource("/image/img5.png"))));
-            home.addItem(new ModelItem(ID++, "Adidas", "NMD City Stock 2", 120, "Adidas", new ImageIcon(getClass().getResource("/image/img6.png"))));
+        for (SanPhamChiTiet o : cTService.getAll()) {
+            home.addItem(o);
         }
+//        for (int i = 0; i <= 5; i++) {
+//            home.addItem(new SanPhamChiTiet().builder().build());
+//            home.addItem(new ModelItem(ID++, "SUPERNOVA", "NMD City Stock 2", 150, "Adidas", new ImageIcon(getClass().getResource("/image/img2.png"))));
+//            home.addItem(new ModelItem(ID++, "SUPERNOVA", "NMD City Stock 2", 150, "Adidas", new ImageIcon(getClass().getResource("/image/img3.png"))));
+//            home.addItem(new ModelItem(ID++, "Adidas", "NMD City Stock 2", 160, "Adidas", new ImageIcon(getClass().getResource("/image/img4.png"))));
+//            home.addItem(new ModelItem(ID++, "Adidas", "NMD City Stock 2", 120, "Adidas", new ImageIcon(getClass().getResource("/image/img5.png"))));
+//            home.addItem(new ModelItem(ID++, "Adidas", "NMD City Stock 2", 120, "Adidas", new ImageIcon(getClass().getResource("/image/img6.png"))));
+//        }
     }
-
+    
     private Point getLocationOf(Component com) {
         Point p = home.getPanelItemLocation();
         int x = p.x;
@@ -82,7 +87,7 @@ public class Form_BanHang extends javax.swing.JPanel {
         int top = 35;
         return new Point(x + itemX + left, y + itemY + top);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

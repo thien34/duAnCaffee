@@ -1,16 +1,17 @@
 package component;
 
-import entity.ModelItem;
+import entity.SanPhamChiTiet;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.text.DecimalFormat;
+import ultis.ImageHelper;
 
 public class ItemProduct extends javax.swing.JPanel {
 
-    public ModelItem getData() {
+    public SanPhamChiTiet getData() {
         return data;
     }
 
@@ -31,16 +32,16 @@ public class ItemProduct extends javax.swing.JPanel {
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    private ModelItem data;
+    private SanPhamChiTiet data;
 
-    public void setData(ModelItem data) {
+    public void setData(SanPhamChiTiet data) {
         this.data = data;
-        pic.setImage(data.getImage());
-        lbItemName.setText(data.getItemName());
-        lbDescription.setText(data.getDescription());
-        lbBrand.setText(data.getBrandName());
+        pic.setImage(ImageHelper.readImg(data.getAnh()));
+        lbItemName.setText(data.getIdSanPham() + "");
+        lbDescription.setText("Độ rang: " + data.getIdDoRang() + "Hương vị: " + data.getIdHuongVi() + "Khối lượng: " + data.getIdKhoiLuong());
+        lbBrand.setText(data.getId() + "");
         DecimalFormat df = new DecimalFormat("$#,##0.00");
-        lbPrice.setText(df.format(data.getPrice()));
+        lbPrice.setText(df.format(data.getGia()));
     }
 
     @Override
@@ -94,7 +95,7 @@ public class ItemProduct extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(pic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(lbBrand)
+                        .addComponent(lbBrand, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lbPrice))
                     .addComponent(lbItemName, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)

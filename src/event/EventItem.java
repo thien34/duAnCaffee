@@ -1,9 +1,9 @@
 package event;
 
-import entity.ModelItem;
+import entity.SanPhamChiTiet;
 import java.awt.Component;
 
 public interface EventItem {
 
-    public void itemClick(Component com, ModelItem item);
+    public void itemClick(Component com, SanPhamChiTiet item);
 }

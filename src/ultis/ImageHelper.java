@@ -39,6 +39,6 @@ public class ImageHelper {
             return null;
         }
         File path = new File("src/image", fileName);
-        return new ImageIcon(new ImageIcon(path.getAbsolutePath()).getImage().getScaledInstance(183, 216, Image.SCALE_DEFAULT));
+        return new ImageIcon(new ImageIcon(path.getAbsolutePath()).getImage().getScaledInstance(175, 201, Image.SCALE_DEFAULT));
     }
 }

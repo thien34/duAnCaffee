@@ -2,7 +2,7 @@ package form;
 
 import com.raven.swing.*;
 import component.ItemProduct;
-import entity.ModelItem;
+import entity.SanPhamChiTiet;
 import event.EventItem;
 import java.awt.Component;
 import java.awt.Point;
@@ -24,7 +24,7 @@ public class FormHomeUI extends javax.swing.JPanel {
         this.event = event;
     }
 
-    public void addItem(ModelItem data) {
+    public void addItem(SanPhamChiTiet data) {
         if (data != null) {
             ItemProduct item = new ItemProduct();
             item.setData(data);
@@ -58,13 +58,13 @@ public class FormHomeUI extends javax.swing.JPanel {
         }
     }
 
-    public void showItem(ModelItem data) {
+    public void showItem(SanPhamChiTiet data) {
         if (data != null) {
-            lbItemName.setText(data.getItemName());
-            txtDescription.setText(data.getDescription());
-            lbBrand.setText(data.getBrandName());
+            lbItemName.setText(data.getIdSanPham() + "");
+            txtDescription.setText("Độ rang: " + data.getIdDoRang() + "Hương vị: " + data.getIdHuongVi() + "Khối lượng: " + data.getIdKhoiLuong());
+            lbBrand.setText(data.getId() + "");
             DecimalFormat df = new DecimalFormat("$#,##0.00");
-            lbPrice.setText(df.format(data.getPrice()));
+            lbPrice.setText(df.format(data.getGia()));
         } else {
             System.out.println("Invalid ModelItem data provided for item details");
         }
