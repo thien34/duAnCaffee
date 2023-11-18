@@ -117,7 +117,7 @@ public final class Form_QLSP extends javax.swing.JPanel {
                 .idHuongVi(huongVi.getId())
                 .anh(jLabel16.getToolTipText())
                 .soLuong(Integer.valueOf(jTextField9.getText()))
-                .gia(Float.valueOf(jTextField8.getText()))
+                .gia(Integer.valueOf(jTextField8.getText()))
                 .build();
     }
 
@@ -1354,7 +1354,7 @@ public final class Form_QLSP extends javax.swing.JPanel {
         jButton9.setEnabled(true);
         jButton10.setEnabled(false);
         jLabel16.setIcon(null);
-                loadDataSPCT(cTService.getAll());
+        loadDataSPCT(cTService.getAll());
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jTable3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable3MouseClicked

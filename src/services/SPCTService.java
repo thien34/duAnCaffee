@@ -32,7 +32,7 @@ public class SPCTService implements MethodService<SanPhamChiTiet> {
                         .idHuongVi(rs.getInt(6))
                         .anh(rs.getString(7))
                         .soLuong(rs.getInt(8))
-                        .gia(rs.getFloat(9))
+                        .gia(rs.getInt(9))
                         .moTa(rs.getString(10))
                         .build();
                 list.add(spct);

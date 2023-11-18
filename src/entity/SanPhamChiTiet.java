@@ -26,6 +26,6 @@ public class SanPhamChiTiet {
     Integer idHuongVi;
     String anh;
     Integer soLuong;
-    Float gia;       
+    Integer gia;       
     String moTa;
 }

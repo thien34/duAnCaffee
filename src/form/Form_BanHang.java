@@ -25,7 +25,7 @@ public class Form_BanHang extends javax.swing.JPanel {
         setBackground(new Color(0, 0, 0, 0));
         init();
         animator = PropertySetter.createAnimator(500, mainPanel, "imageLocation", animatePoint, mainPanel.getTargetLocation());
-        animator.addTarget(new PropertySetter(mainPanel, "imageSize", new Dimension(160, 120), mainPanel.getTargetSize()));
+        animator.addTarget(new PropertySetter(mainPanel, "imageSize", new Dimension(180, 120), mainPanel.getTargetSize()));
         animator.addTarget(new TimingTargetAdapter() {
             @Override
             public void end() {
@@ -51,14 +51,14 @@ public class Form_BanHang extends javax.swing.JPanel {
             }
             if (itemSelected != item) {
                 if (!animator.isRunning()) {
-                    itemSelected = item;
+//                    itemSelected = item;
                     animatePoint = getLocationOf(com);
                     mainPanel.setImage(ImageHelper.readImg(item.getAnh()));
                     mainPanel.setImageLocation(animatePoint);
                     mainPanel.setImageSize(new Dimension(180, 120));
                     mainPanel.repaint();
                     home.setSelected(com);
-                    home.showItem(item);
+//                    home.showItem(item);
                     animator.start();
                 }
             }

@@ -1,15 +1,21 @@
 package component;
 
 import entity.SanPhamChiTiet;
+import entity.ThuocTinh;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.text.DecimalFormat;
+import services.SanPhamService;
+import services.ThuocTinhService;
 import ultis.ImageHelper;
 
 public class ItemProduct extends javax.swing.JPanel {
+
+    SanPhamService sanPhamService = new SanPhamService();
+    ThuocTinhService thuocTinhService = new ThuocTinhService();
 
     public SanPhamChiTiet getData() {
         return data;
@@ -37,10 +43,13 @@ public class ItemProduct extends javax.swing.JPanel {
     public void setData(SanPhamChiTiet data) {
         this.data = data;
         pic.setImage(ImageHelper.readImg(data.getAnh()));
-        lbItemName.setText(data.getIdSanPham() + "");
-        lbDescription.setText("Độ rang: " + data.getIdDoRang() + "Hương vị: " + data.getIdHuongVi() + "Khối lượng: " + data.getIdKhoiLuong());
+        lbItemName.setText(sanPhamService.getByID(data.getIdSanPham()).getTenSp());
+        ThuocTinh doRang = thuocTinhService.getThuocTinhById(data.getIdDoRang(), "DoRang");
+        ThuocTinh huongVi = thuocTinhService.getThuocTinhById(data.getIdHuongVi(), "HuongVi");
+        ThuocTinh khoiLuong = thuocTinhService.getThuocTinhById(data.getIdKhoiLuong(), "KhoiLuong");
+        setToolTipText("Độ rang: " + doRang.getValue() + "\nHương vị: " + huongVi.getValue() + "\nKhối lượng: " + khoiLuong.getValue());
         lbBrand.setText(data.getId() + "");
-        DecimalFormat df = new DecimalFormat("VND#,##0.00");
+        DecimalFormat df = new DecimalFormat("VND#,##0");
         lbPrice.setText(df.format(data.getGia()));
     }
 
@@ -63,7 +72,6 @@ public class ItemProduct extends javax.swing.JPanel {
     private void initComponents() {
 
         lbItemName = new javax.swing.JLabel();
-        lbDescription = new javax.swing.JLabel();
         lbPrice = new javax.swing.JLabel();
         lbBrand = new javax.swing.JLabel();
         pic = new com.raven.swing.PictureBox();
@@ -73,10 +81,6 @@ public class ItemProduct extends javax.swing.JPanel {
         lbItemName.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         lbItemName.setForeground(new java.awt.Color(76, 76, 76));
         lbItemName.setText("Item Name");
-
-        lbDescription.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        lbDescription.setForeground(new java.awt.Color(178, 178, 178));
-        lbDescription.setText("Description");
 
         lbPrice.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         lbPrice.setForeground(new java.awt.Color(76, 76, 76));
@@ -100,8 +104,7 @@ public class ItemProduct extends javax.swing.JPanel {
                         .addComponent(lbBrand, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lbPrice))
-                    .addComponent(lbItemName, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addComponent(lbDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
+                    .addComponent(lbItemName, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
@@ -110,10 +113,8 @@ public class ItemProduct extends javax.swing.JPanel {
                 .addGap(10, 10, 10)
                 .addComponent(lbItemName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbDescription)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pic, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pic, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbPrice)
                     .addComponent(lbBrand))
@@ -123,7 +124,6 @@ public class ItemProduct extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lbBrand;
-    private javax.swing.JLabel lbDescription;
     private javax.swing.JLabel lbItemName;
     private javax.swing.JLabel lbPrice;
     private com.raven.swing.PictureBox pic;
