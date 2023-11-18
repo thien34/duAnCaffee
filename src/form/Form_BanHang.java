@@ -67,14 +67,6 @@ public class Form_BanHang extends javax.swing.JPanel {
         for (SanPhamChiTiet o : cTService.getAll()) {
             home.addItem(o);
         }
-//        for (int i = 0; i <= 5; i++) {
-//            home.addItem(new SanPhamChiTiet().builder().build());
-//            home.addItem(new ModelItem(ID++, "SUPERNOVA", "NMD City Stock 2", 150, "Adidas", new ImageIcon(getClass().getResource("/image/img2.png"))));
-//            home.addItem(new ModelItem(ID++, "SUPERNOVA", "NMD City Stock 2", 150, "Adidas", new ImageIcon(getClass().getResource("/image/img3.png"))));
-//            home.addItem(new ModelItem(ID++, "Adidas", "NMD City Stock 2", 160, "Adidas", new ImageIcon(getClass().getResource("/image/img4.png"))));
-//            home.addItem(new ModelItem(ID++, "Adidas", "NMD City Stock 2", 120, "Adidas", new ImageIcon(getClass().getResource("/image/img5.png"))));
-//            home.addItem(new ModelItem(ID++, "Adidas", "NMD City Stock 2", 120, "Adidas", new ImageIcon(getClass().getResource("/image/img6.png"))));
-//        }
     }
     
     private Point getLocationOf(Component com) {
