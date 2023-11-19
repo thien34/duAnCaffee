@@ -7,6 +7,7 @@ import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import services.SanPhamService;
 import services.ThuocTinhService;
@@ -31,11 +32,16 @@ public class ItemProduct extends javax.swing.JPanel {
     }
 
     private boolean selected;
-
+    
+     public void setButtonClickListener(ActionListener listener) {
+        jButton1.addActionListener(listener);
+    }
+    
     public ItemProduct() {
         initComponents();
         setOpaque(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
+     
     }
 
     private SanPhamChiTiet data;
@@ -47,8 +53,9 @@ public class ItemProduct extends javax.swing.JPanel {
         ThuocTinh doRang = thuocTinhService.getThuocTinhById(data.getIdDoRang(), "DoRang");
         ThuocTinh huongVi = thuocTinhService.getThuocTinhById(data.getIdHuongVi(), "HuongVi");
         ThuocTinh khoiLuong = thuocTinhService.getThuocTinhById(data.getIdKhoiLuong(), "KhoiLuong");
-        setToolTipText("Độ rang: " + doRang.getValue() + "\nHương vị: " + huongVi.getValue() + "\nKhối lượng: " + khoiLuong.getValue());
-        lbBrand.setText(data.getId() + "");
+        setToolTipText("IDSPCT: " + data.getMa() + "\nĐộ rang: " + doRang.getValue()
+                + "\nHương vị: " + huongVi.getValue() + "\nKhối lượng: "
+                + khoiLuong.getValue() + "\nSố lượng: " + data.getSoLuong());
         DecimalFormat df = new DecimalFormat("VND#,##0");
         lbPrice.setText(df.format(data.getGia()));
     }
@@ -73,57 +80,81 @@ public class ItemProduct extends javax.swing.JPanel {
 
         lbItemName = new javax.swing.JLabel();
         lbPrice = new javax.swing.JLabel();
-        lbBrand = new javax.swing.JLabel();
         pic = new com.raven.swing.PictureBox();
+        jSpinner1 = new javax.swing.JSpinner();
+        jButton1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        lbItemName.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        lbItemName.setFont(new java.awt.Font("sansserif", 1, 17)); // NOI18N
         lbItemName.setForeground(new java.awt.Color(76, 76, 76));
         lbItemName.setText("Item Name");
 
-        lbPrice.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        lbPrice.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
         lbPrice.setForeground(new java.awt.Color(76, 76, 76));
         lbPrice.setText("$0.00");
 
-        lbBrand.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        lbBrand.setForeground(new java.awt.Color(76, 76, 76));
-        lbBrand.setText("Brand");
-
         pic.setImage(new javax.swing.ImageIcon(getClass().getResource("/image/coffee(1).png"))); // NOI18N
+
+        jSpinner1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jSpinner1.setBorder(null);
+        jSpinner1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        jButton1.setText("Thêm");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(lbBrand, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbPrice))
-                    .addComponent(lbItemName, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
-                .addGap(10, 10, 10))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lbItemName, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                        .addGap(10, 10, 10))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(pic, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lbPrice)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(lbItemName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pic, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pic, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbPrice)
-                    .addComponent(lbBrand))
-                .addGap(20, 20, 20))
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(12, 12, 12))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lbBrand;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JLabel lbItemName;
     private javax.swing.JLabel lbPrice;
     private com.raven.swing.PictureBox pic;

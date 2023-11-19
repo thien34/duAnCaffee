@@ -12,7 +12,7 @@ public class NhanVienService implements MethodService<NhanVien> {
     String GET_ALL = "Select * From NhanVien";
     String GET_BY_ID = "Select * From NhanVien Where idNhanVien = ?";
     String INSERT = "Insert NhanVien(ten, gioitinh, ngaysinh, sdt,email,diachi,matkhau,vaitro,trangthai) "
-            + "VALUES (?, ?, ?, ?,?,?,?,?,?)";
+            + "VALUES (?,?,?,?,?,?,?,?,?)";
     String UPDATE = "UPDATE NhanVien SET ten = ?, gioitinh = ?, ngaysinh = ?, sdt = ?, email = ?, diachi = ?, matkhau = ?, vaitro = ?, trangthai = ? WHERE IDNhanVien = ?";
     String DELETE = "Delete SanPham Where IDSanPham = ?";
 

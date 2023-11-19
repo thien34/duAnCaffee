@@ -6,16 +6,18 @@ import entity.SanPhamChiTiet;
 import event.EventItem;
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DecimalFormat;
+import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 import services.SanPhamService;
 
 public class FormHomeUI extends javax.swing.JPanel {
 
     private EventItem event;
-    private SanPhamService sanPhamService = new SanPhamService();
+    private final SanPhamService sanPhamService = new SanPhamService();
 
     public FormHomeUI() {
         initComponents();
@@ -30,13 +32,8 @@ public class FormHomeUI extends javax.swing.JPanel {
         if (data != null) {
             ItemProduct item = new ItemProduct();
             item.setData(data);
-            item.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent me) {
-                    if (SwingUtilities.isLeftMouseButton(me)) {
-                        event.itemClick(item, data);
-                    }
-                }
+            item.setButtonClickListener((ActionEvent e) -> {
+                event.itemClick(item, data);
             });
             panelItem.add(item);
             panelItem.repaint();
@@ -59,19 +56,6 @@ public class FormHomeUI extends javax.swing.JPanel {
             System.out.println("Invalid component provided for selection");
         }
     }
-
-//    public void showItem(SanPhamChiTiet data) {
-//        if (data != null) {
-//            lbItemName.setText(sanPhamService.getByID(data.getIdSanPham()).getTenSp());
-//            txtDescription.setText("Độ rang: " + data.getIdDoRang() + "Hương vị: " + data.getIdHuongVi() + "Khối lượng: " + data.getIdKhoiLuong());
-//            lbBrand.setText(data.getId() + "");
-//                    setToolTipText("Ánh chó");
-//            DecimalFormat df = new DecimalFormat("VND#,##0");
-//            lbPrice.setText(df.format(data.getGia()));
-//        } else {
-//            System.out.println("Invalid ModelItem data provided for item details");
-//        }
-//    }
 
     public Point getPanelItemLocation() {
         Point p = scroll.getLocation();
@@ -96,6 +80,7 @@ public class FormHomeUI extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setOpaque(false);
 
@@ -108,11 +93,11 @@ public class FormHomeUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Tên sản phẩm", "Số lượng", "Giá"
+                "Tên sản phẩm", "Số lượng", "Giá", "Action"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -120,6 +105,9 @@ public class FormHomeUI extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(170);
+        }
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 102, 51));
@@ -128,6 +116,7 @@ public class FormHomeUI extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setText("Tổng tiền");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Historic", 0, 21)); // NOI18N
@@ -135,31 +124,38 @@ public class FormHomeUI extends javax.swing.JPanel {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Khách đưa");
 
         jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Trả");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("15000");
 
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jButton1.setText("Thanh toán");
 
+        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jButton2.setText("Hủy");
+
+        jButton3.setText("+");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 11, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
+                        .addGap(45, 45, 45)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -176,21 +172,25 @@ public class FormHomeUI extends javax.swing.JPanel {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2)))))
-                .addGap(183, 183, 183))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(84, 84, 84)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jButton2)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -216,7 +216,7 @@ public class FormHomeUI extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,6 +228,7 @@ public class FormHomeUI extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
