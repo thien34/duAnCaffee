@@ -16,16 +16,12 @@ import lombok.experimental.FieldDefaults;
 @ToString
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+public class HoaDon {
 
-public class SanPhamChiTiet {
-    Integer id;
-    String ma;
-    Integer idSanPham;
-    Integer idKhoiLuong;
-    Integer idDoRang;
-    Integer idHuongVi;
-    String anh;
-    Integer soLuong;
-    Integer gia;       
-    String moTa;
+    Integer idHoaDon;
+    Integer idNhanVien;
+    Integer idKhachHang;
+    String trangThai;
+    String ngayMua;
+    Integer tien;
 }

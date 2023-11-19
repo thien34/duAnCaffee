@@ -15,12 +15,13 @@ public class SPCTService implements MethodService<SanPhamChiTiet> {
             + "VALUES (?,?,?,?,?,?,?,?,?)";
     String UPDATE = "UPDATE SanPhamChiTiet SET MaSPCT = ?, IDKhoiLuong = ?, IDDoRang = ?, IDHuongVi = ?, Anh = ?, SoLuong = ?, Gia = ?, Mota  = ? WHERE IDSPCT = ?";
     String DELETE = "Delete SanPhamChiTiet Where IDSPCT = ?";
+    String GET_BY_IDSP = "Select * From SanPhamChiTiet Where IDSanPham = ?";
 
     @Override
     public List<SanPhamChiTiet> selectBySQL(String sql, Object... args) {
         List<SanPhamChiTiet> list = new ArrayList<>();
         try {
-            ResultSet rs = JdbcHelper.executeQuery(sql);
+            ResultSet rs = JdbcHelper.executeQuery(sql, args);
             while (rs.next()) {
                 SanPhamChiTiet spct = SanPhamChiTiet.builder()
                         .id(rs.getInt(1))
@@ -31,7 +32,7 @@ public class SPCTService implements MethodService<SanPhamChiTiet> {
                         .idHuongVi(rs.getInt(6))
                         .anh(rs.getString(7))
                         .soLuong(rs.getInt(8))
-                        .gia(rs.getFloat(9))
+                        .gia(rs.getInt(9))
                         .moTa(rs.getString(10))
                         .build();
                 list.add(spct);
@@ -45,6 +46,10 @@ public class SPCTService implements MethodService<SanPhamChiTiet> {
     @Override
     public List<SanPhamChiTiet> getAll() {
         return selectBySQL(GET_ALL);
+    }
+
+    public List<SanPhamChiTiet> getByIDSP(int idsp) {
+        return selectBySQL(GET_BY_IDSP, idsp);
     }
 
     @Override

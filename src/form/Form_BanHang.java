@@ -13,13 +13,13 @@ import services.SPCTService;
 import ultis.ImageHelper;
 
 public class Form_BanHang extends javax.swing.JPanel {
-    
+
     private FormHomeUI home;
     private final Animator animator;
     private Point animatePoint;
     private SanPhamChiTiet itemSelected;
     private final SPCTService cTService = new SPCTService();
-    
+
     public Form_BanHang() {
         initComponents();
         setBackground(new Color(0, 0, 0, 0));
@@ -36,14 +36,14 @@ public class Form_BanHang extends javax.swing.JPanel {
         animator.setAcceleration(.5f);
         animator.setDeceleration(.5f);
     }
-    
+
     private void init() {
         home = new FormHomeUI();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(home);
         testData();
     }
-    
+
     private void testData() {
         home.setEvent((Component com, SanPhamChiTiet item) -> {
             if (itemSelected != null) {
@@ -58,17 +58,16 @@ public class Form_BanHang extends javax.swing.JPanel {
                     mainPanel.setImageSize(new Dimension(180, 120));
                     mainPanel.repaint();
                     home.setSelected(com);
-                    home.showItem(item);
+                    System.out.println(item);
                     animator.start();
                 }
             }
         });
-        int ID = 1;
         for (SanPhamChiTiet o : cTService.getAll()) {
             home.addItem(o);
         }
     }
-    
+
     private Point getLocationOf(Component com) {
         Point p = home.getPanelItemLocation();
         int x = p.x;
@@ -79,7 +78,7 @@ public class Form_BanHang extends javax.swing.JPanel {
         int top = 35;
         return new Point(x + itemX + left, y + itemY + top);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

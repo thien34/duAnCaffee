@@ -66,8 +66,8 @@ public class MainPanel extends JPanel {
     private Icon imageOld;
     private Point imageLocation;
     private Dimension imageSize;
-    private Point targetLocation = new Point(35, -50);
-    private Dimension targetSize = new Dimension(250, 250);
+    private Point targetLocation = new Point(850, 100); //set vị trí trans img
+    private Dimension targetSize = new Dimension(0, 0); //set kícg thước sau trans img
 
     public MainPanel() {
         setOpaque(false);
