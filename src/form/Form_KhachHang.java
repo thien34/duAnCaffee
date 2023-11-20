@@ -1,24 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package form;
 
 import entity.KhachHang;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 import services.KhachHangServiceV1;
 
 /**
@@ -56,7 +47,7 @@ public class Form_KhachHang extends javax.swing.JPanel {
         DefaultTableModel tm = (DefaultTableModel) jTable3.getModel();
         tm.setRowCount(0);
 
-        for (KhachHang o :list) {
+        for (KhachHang o : list) {
             if (o.getTichDiem() > 1000 && o != null) {
                 tm.addRow(new Object[]{
                     o.getId(), o.getTen(), o.getSdt(), o.getDiaChi(),
@@ -526,13 +517,13 @@ public class Form_KhachHang extends javax.swing.JPanel {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         List<KhachHang> list = new ArrayList<>();
-        String value  = jTextField8.getText().trim();
+        String value = jTextField8.getText().trim();
         for (KhachHang o : khachHangServiceV1.getAll()) {
-            if(o.getSdt().contains(value)) {
+            if (o.getSdt().contains(value)) {
                 list.add(o);
             }
         }
-        
+
         loadataV1(list);
         loadataV2(list);
     }//GEN-LAST:event_jButton4ActionPerformed
