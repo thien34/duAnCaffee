@@ -44,7 +44,7 @@ public class Form_BanHang extends javax.swing.JPanel {
         testData();
     }
 
-    private void testData() {
+    public void testData() {
         home.setEvent((Component com, SanPhamChiTiet item) -> {
             if (itemSelected != null) {
                 mainPanel.setImageOld(ImageHelper.readImg(itemSelected.getAnh()));

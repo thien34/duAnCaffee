@@ -1,7 +1,9 @@
 package component;
 
+import entity.HoaDonChiTiet;
 import entity.SanPhamChiTiet;
 import entity.ThuocTinh;
+import event.ItemClickListener;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -9,17 +11,27 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import services.HoaDonCTService;
+import services.HoaDonService;
 import services.SanPhamService;
 import services.ThuocTinhService;
 import ultis.ImageHelper;
 
-public class ItemProduct extends javax.swing.JPanel {
+public final class ItemProduct extends javax.swing.JPanel {
 
-    SanPhamService sanPhamService = new SanPhamService();
-    ThuocTinhService thuocTinhService = new ThuocTinhService();
+    private final SanPhamService sanPhamService = new SanPhamService();
+    private final ThuocTinhService thuocTinhService = new ThuocTinhService();
+    private final HoaDonService donService = new HoaDonService();
+    private final HoaDonCTService cTService = new HoaDonCTService();
+    public static boolean isEnabled;
+    private ItemClickListener itemClickListener;
 
     public SanPhamChiTiet getData() {
         return data;
+    }
+    
+    public void setItemClickListener(ItemClickListener listener) {
+        this.itemClickListener = listener;
     }
 
     public boolean isSelected() {
@@ -32,16 +44,22 @@ public class ItemProduct extends javax.swing.JPanel {
     }
 
     private boolean selected;
-    
-     public void setButtonClickListener(ActionListener listener) {
+
+    public void setButtonClickListener(ActionListener listener) {
         jButton1.addActionListener(listener);
     }
-    
+
     public ItemProduct() {
         initComponents();
         setOpaque(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
-     
+        setEnabled(isEnabled);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+        jButton1.setEnabled(enabled);
     }
 
     private SanPhamChiTiet data;
@@ -74,6 +92,14 @@ public class ItemProduct extends javax.swing.JPanel {
         super.paint(grphcs);
     }
 
+    HoaDonChiTiet getModelHDCT() {
+        return HoaDonChiTiet.builder()
+                .idHoaDon(donService.getAll().get(donService.getAll().size() - 1).getIdHoaDon())
+                .idSPCT(data.getId())
+                .soLongMua(Integer.valueOf(jSpinner1.getValue().toString()))
+                .build();
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -91,7 +117,7 @@ public class ItemProduct extends javax.swing.JPanel {
         lbItemName.setText("Item Name");
 
         lbPrice.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
-        lbPrice.setForeground(new java.awt.Color(76, 76, 76));
+        lbPrice.setForeground(new java.awt.Color(115, 156, 121));
         lbPrice.setText("$0.00");
 
         pic.setImage(new javax.swing.ImageIcon(getClass().getResource("/image/coffee(1).png"))); // NOI18N
@@ -128,8 +154,8 @@ public class ItemProduct extends javax.swing.JPanel {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,7 +175,10 @@ public class ItemProduct extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        cTService.add(getModelHDCT());
+        if (itemClickListener != null) {
+            itemClickListener.onItemClick(data);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

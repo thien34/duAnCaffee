@@ -11,6 +11,7 @@ public class HoaDonCTService implements MethodService<HoaDonChiTiet> {
 
     String GET_ALL = "Select * From HoaDonChiTiet";
     String GET_BY_ID = "Select * From HoaDonChiTiet Where ID = ?";
+    String GET_BY_IDHD = "Select * From HoaDonChiTiet Where IDHoaDon = ?";
     String INSERT = "Insert HoaDonChiTiet(IDHoaDon, IDSPCT, SoLuong) VALUES (?,?,?)";
     String UPDATE = "UPDATE HoaDonChiTiet SET IDHoaDon = ?, IDSPCT = ?, SoLuong  = ? WHERE ID = ?";
     String DELETE = "Delete HoaDonChiTiet Where ID = ?";
@@ -42,6 +43,10 @@ public class HoaDonCTService implements MethodService<HoaDonChiTiet> {
     @Override
     public HoaDonChiTiet getByID(int id) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public List<HoaDonChiTiet> getByIDHD(int id) {
+        return selectBySQL(GET_BY_IDHD, id);
     }
 
     @Override

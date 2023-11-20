@@ -54,7 +54,11 @@ public class SPCTService implements MethodService<SanPhamChiTiet> {
 
     @Override
     public SanPhamChiTiet getByID(int id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<SanPhamChiTiet> list = selectBySQL(GET_BY_ID, id);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     @Override
