@@ -63,4 +63,6 @@ public class HoaDonService implements MethodService<HoaDon> {
     public void remove(int id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    
 }

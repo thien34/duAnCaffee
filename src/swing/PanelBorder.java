@@ -1,14 +1,18 @@
 package swing;
 
+import form.TestBarChart;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 
 public class PanelBorder extends javax.swing.JPanel {
 
     public PanelBorder() {
         initComponents();
         setOpaque(false);
+       
     }
 
     @SuppressWarnings("unchecked")
