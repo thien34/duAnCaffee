@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.Date;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,4 +25,5 @@ public class HoaDon {
     String trangThai;
     String ngayMua;
     Integer tien;
+ 
 }
