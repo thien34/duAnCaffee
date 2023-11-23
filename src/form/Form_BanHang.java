@@ -58,7 +58,6 @@ public class Form_BanHang extends javax.swing.JPanel {
                     mainPanel.setImageSize(new Dimension(180, 120));
                     mainPanel.repaint();
                     home.setSelected(com);
-                    System.out.println(item);
                     animator.start();
                 }
             }

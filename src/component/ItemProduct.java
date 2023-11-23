@@ -1,5 +1,6 @@
 package component;
 
+import entity.HoaDon;
 import entity.HoaDonChiTiet;
 import entity.SanPhamChiTiet;
 import entity.ThuocTinh;
@@ -16,6 +17,7 @@ import services.HoaDonService;
 import services.SanPhamService;
 import services.ThuocTinhService;
 import ultis.ImageHelper;
+import ultis.MsgHelper;
 
 public final class ItemProduct extends javax.swing.JPanel {
 
@@ -29,7 +31,7 @@ public final class ItemProduct extends javax.swing.JPanel {
     public SanPhamChiTiet getData() {
         return data;
     }
-    
+
     public void setItemClickListener(ItemClickListener listener) {
         this.itemClickListener = listener;
     }
@@ -54,6 +56,7 @@ public final class ItemProduct extends javax.swing.JPanel {
         setOpaque(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
         setEnabled(isEnabled);
+
     }
 
     @Override
@@ -100,6 +103,16 @@ public final class ItemProduct extends javax.swing.JPanel {
                 .build();
     }
 
+    HoaDonChiTiet getModelHDCT_v2() {
+        HoaDon hoaDon = donService.getAll().get(donService.getAll().size() - 1);
+        HoaDonChiTiet chiTiet = cTService.getByIDHDSP(hoaDon.getIdHoaDon(), data.getId());
+        return HoaDonChiTiet.builder()
+                .idHoaDon(donService.getAll().get(donService.getAll().size() - 1).getIdHoaDon())
+                .idSPCT(data.getId())
+                .soLongMua(Integer.valueOf(jSpinner1.getValue().toString()) + chiTiet.getSoLongMua())
+                .build();
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -125,6 +138,18 @@ public final class ItemProduct extends javax.swing.JPanel {
         jSpinner1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jSpinner1.setBorder(null);
         jSpinner1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinner1StateChanged(evt);
+            }
+        });
+        jSpinner1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jSpinner1InputMethodTextChanged(evt);
+            }
+        });
 
         jButton1.setText("Thêm");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -175,11 +200,48 @@ public final class ItemProduct extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        cTService.add(getModelHDCT());
-        if (itemClickListener != null) {
-            itemClickListener.onItemClick(data);
+        if (Integer.valueOf(jSpinner1.getValue().toString()) < 0) {
+            MsgHelper.alert(this, "Không amm \nThêm thất bại");
+            jSpinner1.setValue(0);
+            return;
         }
+        if (Integer.valueOf(jSpinner1.getValue().toString()) > data.getSoLuong()) {
+            MsgHelper.alert(this, "Không đủ số lượng cho đại gia mua \nThêm thất bại ");
+            jSpinner1.setValue(data.getSoLuong());
+            return;
+        }
+        HoaDon lastHD = donService.getAll().get(donService.getAll().size() - 1);
+        HoaDonChiTiet chiTiet = cTService.getByIDHDSP(lastHD.getIdHoaDon(), data.getId());
+        if (chiTiet == null) {
+            cTService.add(getModelHDCT());
+        } else {
+            cTService.update(getModelHDCT_v2(), chiTiet.getIdHDCT());
+        }
+        jSpinner1.setValue(0);
+        itemClickListener.onItemClick(data);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+        if (Integer.valueOf(jSpinner1.getValue().toString()) < 0) {
+            MsgHelper.alert(this, "Không amm");
+            jSpinner1.setValue(0);
+        }
+        if (Integer.valueOf(jSpinner1.getValue().toString()) > data.getSoLuong()) {
+            MsgHelper.alert(this, "Không đủ số lượng cho đại gia mua");
+            jSpinner1.setValue(data.getSoLuong());
+        }
+    }//GEN-LAST:event_jSpinner1StateChanged
+
+    private void jSpinner1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jSpinner1InputMethodTextChanged
+        if (Integer.valueOf(jSpinner1.getValue().toString()) < 0) {
+            MsgHelper.alert(this, "Không amm");
+            jSpinner1.setValue(0);
+        }
+        if (Integer.valueOf(jSpinner1.getValue().toString()) > data.getSoLuong()) {
+            MsgHelper.alert(this, "Không đủ số lượng cho đại gia mua");
+            jSpinner1.setValue(data.getSoLuong());
+        }
+    }//GEN-LAST:event_jSpinner1InputMethodTextChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

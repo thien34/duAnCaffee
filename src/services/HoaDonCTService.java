@@ -12,9 +12,11 @@ public class HoaDonCTService implements MethodService<HoaDonChiTiet> {
     String GET_ALL = "Select * From HoaDonChiTiet";
     String GET_BY_ID = "Select * From HoaDonChiTiet Where ID = ?";
     String GET_BY_IDHD = "Select * From HoaDonChiTiet Where IDHoaDon = ?";
+    String GET_BY_IDHDSP = "Select * From HoaDonChiTiet Where IDHoaDon = ? AND IDSPCT = ?";
     String INSERT = "Insert HoaDonChiTiet(IDHoaDon, IDSPCT, SoLuong) VALUES (?,?,?)";
     String UPDATE = "UPDATE HoaDonChiTiet SET IDHoaDon = ?, IDSPCT = ?, SoLuong  = ? WHERE ID = ?";
     String DELETE = "Delete HoaDonChiTiet Where ID = ?";
+    String HUYHD = "Delete HoaDonChiTiet Where IDHoaDon = ?";
 
     @Override
     public List<HoaDonChiTiet> selectBySQL(String sql, Object... args) {
@@ -42,7 +44,19 @@ public class HoaDonCTService implements MethodService<HoaDonChiTiet> {
 
     @Override
     public HoaDonChiTiet getByID(int id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<HoaDonChiTiet> list = this.selectBySQL(GET_BY_ID, id);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    public HoaDonChiTiet getByIDHDSP(int idhd, int idspct) {
+        List<HoaDonChiTiet> list = this.selectBySQL(GET_BY_IDHDSP, idhd, idspct);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     public List<HoaDonChiTiet> getByIDHD(int id) {
@@ -62,7 +76,11 @@ public class HoaDonCTService implements MethodService<HoaDonChiTiet> {
 
     @Override
     public void remove(int id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        JdbcHelper.executeUpdate(DELETE, id);
+    }
+    
+    public void huyHD(int id) {
+        JdbcHelper.executeUpdate(HUYHD, id);
     }
 
 }

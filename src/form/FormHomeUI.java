@@ -23,45 +23,69 @@ import services.SanPhamService;
 import swing.PanelActionAdd;
 import swing.TableActionCellEditer;
 import swing.TableActionCellRender;
-import swing.TableActionEvent;
+import event.TableActionEvent;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import ultis.MsgHelper;
 
-public final class FormHomeUI extends javax.swing.JPanel implements ItemClickListener{
+public final class FormHomeUI extends javax.swing.JPanel implements ItemClickListener {
 
     private EventItem event;
+    private final TableActionEvent event1;
     private final SanPhamService sanPhamService = new SanPhamService();
     private final HoaDonService donService = new HoaDonService();
     private final SPCTService cTService = new SPCTService();
     private final HoaDonCTService hoaDonCTService = new HoaDonCTService();
+    List<HoaDonChiTiet> list = new ArrayList<>();
 
     public FormHomeUI() {
         initComponents();
         scroll.setVerticalScrollBar(new ScrollBar());
+        list = hoaDonCTService.getByIDHD(Integer.parseInt(jLabel7.getText()));
+        event1 = (int row) -> {
+            hoaDonCTService.remove(list.get(row).getIdHDCT());
+            initModel(hoaDonCTService.getByIDHD(Integer.parseInt(jLabel7.getText())));
+        };
+        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String temp = "";
+                String[] arStr = jLabel2.getText().split("\\.");
+                for (String item : arStr) {
+                    temp += item;
+                }
+                if (Integer.valueOf(jTextField1.getText()) <= Integer.valueOf(temp)) {
+                    jLabel5.setText("0");
+                } else {
+                    int tienTra = Integer.valueOf(jTextField1.getText()) - Integer.valueOf(temp);
+                    DecimalFormat df = new DecimalFormat("#,##0");
+                    jLabel5.setText(df.format(tienTra));
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
     }
 
     public void setEvent(EventItem event) {
         this.event = event;
     }
-    
-     
+
+    DefaultTableModel model = new DefaultTableModel();
 
     void initModel(List<HoaDonChiTiet> list) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        
-        TableActionEvent event = new TableActionEvent() {
-        @Override
-        public void onEdit(int row) {
-            System.out.println("Xoa " + row);
-        }
-
-        @Override
-        public void onDelete(int row) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-    };
         jTable1.getColumnModel().getColumn(3).setCellRenderer(new TableActionCellRender(new PanelActionAdd()));
-        jTable1.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditer(event));
+        jTable1.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditer(event1));
         for (HoaDonChiTiet o : list) {
             SanPhamChiTiet spct = cTService.getByID(o.getIdSPCT());
             SanPham sp = sanPhamService.getByID(spct.getIdSanPham());
@@ -69,7 +93,6 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
                 sp.getTenSp(),
                 o.getSoLongMua(),
                 spct.getGia() * o.getSoLongMua()
-
             });
         }
     }
@@ -89,18 +112,52 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
             System.out.println("Invalid ModelItem data provided");
         }
     }
-    
+
+    @Override
     public void onItemClick(SanPhamChiTiet data) {
-        initModel(hoaDonCTService.getByIDHD(Integer.parseInt(jLabel7.getText())));
+        int sumMoney = 0;
+        list = hoaDonCTService.getByIDHD(Integer.parseInt(jLabel7.getText()));
+        initModel(list);
+        panelItem.removeAll();
+        for (SanPhamChiTiet o : cTService.getAll()) {
+            this.addItem(o);
+        }
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            sumMoney += Integer.valueOf(jTable1.getValueAt(i, 2).toString());
+        }
+        DecimalFormat df = new DecimalFormat("#,##0");
+        jLabel2.setText(df.format(sumMoney));
     }
-    
+
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     Date date = new Date();
 
     HoaDon getModelHD() {
         return HoaDon.builder()
                 .idNhanVien(1)
-                .trangThai("N'Chờ thanh toán'")
+                .trangThai("Chờ thanh toán")
+                .ngayMua(dateFormat.format(date))
+                .build();
+    }
+
+    HoaDon getModelHD_v2() {
+        String temp = "";
+        String[] arStr = jLabel2.getText().split("\\.");
+        for (String item : arStr) {
+            temp += item;
+        }
+        return HoaDon.builder()
+                .idNhanVien(1)
+                .trangThai("Thanh toán thành công")
+                .ngayMua(dateFormat.format(date))
+                .tien(Integer.valueOf(temp))
+                .build();
+    }
+
+    HoaDon getModelHD_v3() {
+        return HoaDon.builder()
+                .idNhanVien(1)
+                .trangThai("Hủy")
                 .ngayMua(dateFormat.format(date))
                 .build();
     }
@@ -186,7 +243,7 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
         jLabel1.setText("Tổng tiền");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Historic", 0, 21)); // NOI18N
-        jLabel2.setText("100000");
+        jLabel2.setText("00.000");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 102, 102));
@@ -201,13 +258,23 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
         jLabel4.setText("Trả");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel5.setText("15000");
+        jLabel5.setText("00.000");
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jButton1.setText("Thanh toán");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jButton2.setText("Hủy");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton3.setText("+");
@@ -266,18 +333,18 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton3)
-                        .addComponent(jLabel7)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton3)
+                            .addComponent(jLabel7))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(54, 54, 54)
                         .addComponent(jTextField1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -285,9 +352,11 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -328,6 +397,31 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
             MsgHelper.alert(this, "Thanh toán xong, hoặc hủy hóa đơn");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        donService.update(getModelHD_v2(), Integer.parseInt(jLabel7.getText()));
+        MsgHelper.alert(this, "Thanh toán thành công");
+        jLabel2.setText("0");
+        jLabel5.setText("0");
+        jTextField1.setText("");
+        jLabel7.setText("0");
+        jLabel8.setText("00/00/0000");
+        ischeckHD = true;
+        model.setRowCount(0);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        donService.update(getModelHD_v3(), Integer.parseInt(jLabel7.getText()));
+        hoaDonCTService.huyHD(Integer.parseInt(jLabel7.getText()));
+        MsgHelper.alert(this, "Hủy thành công");
+        jLabel2.setText("0");
+        jLabel5.setText("0");
+        jTextField1.setText("");
+        jLabel7.setText("0");
+        jLabel8.setText("00/00/0000");
+        ischeckHD = true;
+        model.setRowCount(0);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

@@ -1,5 +1,6 @@
 package swing;
 
+import event.TableActionEvent;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.DefaultCellEditor;
@@ -8,7 +9,7 @@ import javax.swing.JTable;
 
 public class TableActionCellEditer extends DefaultCellEditor {
 
-    private TableActionEvent event;
+    private final TableActionEvent event;
 
     public TableActionCellEditer(TableActionEvent event) {
         super(new JCheckBox());

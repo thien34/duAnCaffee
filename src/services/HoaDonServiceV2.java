@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package services;
 
 import ultis.DBContext;
@@ -10,10 +6,6 @@ import java.text.DateFormatSymbols;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- *
- * @author ACER
- */
 public class HoaDonServiceV2 extends DBContext {
 
     public Map<String, Integer> getRevenueByMonth() {
@@ -40,16 +32,17 @@ public class HoaDonServiceV2 extends DBContext {
     public int thongKeByNgay() {
         int soLuongDon = 0;
         try {
-            String sql = "SELECT COUNT(*) AS SoLuongDon\n"
-                    + "FROM dbo.HoaDon\n"
-                    + "WHERE CAST(NgayMua AS DATE) = CAST(GETDATE() AS DATE)";
+            String sql = """
+                         SELECT COUNT(*) AS SoLuongDon
+                         FROM dbo.HoaDon
+                         WHERE CAST(NgayMua AS DATE) = CAST(GETDATE() AS DATE)""";
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 soLuongDon = rs.getInt("SoLuongDon");
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return soLuongDon;
@@ -58,9 +51,10 @@ public class HoaDonServiceV2 extends DBContext {
     public int thongKeByThang() {
         int soLuongDon = 0;
         try {
-            String sql = "SELECT COUNT(*) AS SoLuongDon\n"
-                    + "FROM dbo.HoaDon\n"
-                    + "WHERE MONTH(NgayMua) = MONTH(GETDATE()) AND YEAR(NgayMua) = YEAR(GETDATE())";
+            String sql = """
+                         SELECT COUNT(*) AS SoLuongDon
+                         FROM dbo.HoaDon
+                         WHERE MONTH(NgayMua) = MONTH(GETDATE()) AND YEAR(NgayMua) = YEAR(GETDATE())""";
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -68,7 +62,7 @@ public class HoaDonServiceV2 extends DBContext {
             }
             rs.close();
             st.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return soLuongDon;
@@ -77,9 +71,10 @@ public class HoaDonServiceV2 extends DBContext {
     public double thongKeDoanhThuByNgay() {
         double doanhThu = 0;
         try {
-            String sql = "SELECT SUM(TongTien) AS DoanhThu\n"
-                    + "FROM dbo.HoaDon\n"
-                    + "WHERE CAST(NgayMua AS DATE) = CAST(GETDATE() AS DATE)";
+            String sql = """
+                         SELECT SUM(TongTien) AS DoanhThu
+                         FROM dbo.HoaDon
+                         WHERE CAST(NgayMua AS DATE) = CAST(GETDATE() AS DATE)""";
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -87,7 +82,7 @@ public class HoaDonServiceV2 extends DBContext {
             }
             rs.close();
             st.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return doanhThu;
@@ -96,9 +91,10 @@ public class HoaDonServiceV2 extends DBContext {
     public double thongKeDoanhThuByThang() {
         double doanhThu = 0;
         try {
-            String sql = "SELECT SUM(TongTien) AS DoanhThu\n"
-                    + "FROM dbo.HoaDon\n"
-                    + "WHERE MONTH(NgayMua) = MONTH(GETDATE()) AND YEAR(NgayMua) = YEAR(GETDATE())";
+            String sql = """
+                         SELECT SUM(TongTien) AS DoanhThu
+                         FROM dbo.HoaDon
+                         WHERE MONTH(NgayMua) = MONTH(GETDATE()) AND YEAR(NgayMua) = YEAR(GETDATE())""";
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -106,7 +102,7 @@ public class HoaDonServiceV2 extends DBContext {
             }
             rs.close();
             st.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return doanhThu;
@@ -116,9 +112,10 @@ public class HoaDonServiceV2 extends DBContext {
         double doanhThu = 0;
 
         try {
-            String sql = "SELECT SUM(TongTien) AS DoanhThu\n"
-                    + "FROM dbo.HoaDon\n"
-                    + "WHERE YEAR(NgayMua) = YEAR(GETDATE())";
+            String sql = """
+                         SELECT SUM(TongTien) AS DoanhThu
+                         FROM dbo.HoaDon
+                         WHERE YEAR(NgayMua) = YEAR(GETDATE())""";
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -126,7 +123,7 @@ public class HoaDonServiceV2 extends DBContext {
             }
             rs.close();
             st.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return doanhThu;
@@ -135,9 +132,10 @@ public class HoaDonServiceV2 extends DBContext {
     public int thongKeByNam() {
         int soLuongDon = 0;
         try {
-            String sql = "SELECT COUNT(*) AS SoLuongDon\n"
-                    + "FROM dbo.HoaDon\n"
-                    + "WHERE YEAR(NgayMua) = YEAR(GETDATE())";
+            String sql = """
+                         SELECT COUNT(*) AS SoLuongDon
+                         FROM dbo.HoaDon
+                         WHERE YEAR(NgayMua) = YEAR(GETDATE())""";
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -145,7 +143,7 @@ public class HoaDonServiceV2 extends DBContext {
             }
             rs.close();
             st.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return soLuongDon;
