@@ -49,8 +49,8 @@ public final class Form_QLSP extends javax.swing.JPanel {
         }
     }
 
-    private void mouseClickSPCT(int row) {
-        SanPhamChiTiet spct = cTService.getAll().get(row);
+    private void mouseClickSPCT(String idspct) {
+        SanPhamChiTiet spct = cTService.getByMSPCT(idspct);
         SanPham sanPham = sanPhamService.getByID(spct.getIdSanPham());
         jTextField5.setText(sanPham.getMaSp());
         jTextField6.setText(sanPham.getTenSp());
@@ -303,6 +303,11 @@ public final class Form_QLSP extends javax.swing.JPanel {
         jLabel2.setText("Tên sản phẩm");
 
         jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Tên thương hiệu");
@@ -738,8 +743,18 @@ public final class Form_QLSP extends javax.swing.JPanel {
         jLabel22.setText("Khối lượng");
 
         jComboBox10.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
+        jComboBox10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox10ActionPerformed(evt);
+            }
+        });
 
         jComboBox11.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
+        jComboBox11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox11ActionPerformed(evt);
+            }
+        });
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel23.setText("Độ rang");
@@ -748,6 +763,11 @@ public final class Form_QLSP extends javax.swing.JPanel {
         jLabel24.setText("Hương vị");
 
         jComboBox12.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
+        jComboBox12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox12ActionPerformed(evt);
+            }
+        });
 
         jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel25.setText("Giá từ");
@@ -1247,6 +1267,7 @@ public final class Form_QLSP extends javax.swing.JPanel {
 //        }
         sanPhamService.addSanPham(readSanPham());
         loadDataSanPham();
+        readSanPham();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -1359,18 +1380,40 @@ public final class Form_QLSP extends javax.swing.JPanel {
 
     private void jTable3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable3MouseClicked
         int row = jTable3.getSelectedRow();
-        mouseClickSPCT(row);
+        String idspct = jTable3.getValueAt(row, 0).toString();
+        mouseClickSPCT(idspct);
         jTextField5.setEditable(false);
         jButton10.setEnabled(true);
         jButton9.setEnabled(false);
     }//GEN-LAST:event_jTable3MouseClicked
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        double minPrice = Double.valueOf(jTextField10.getText());
+        double maxPrice = Double.valueOf(jTextField11.getText());
 
+        RowFilter<TableModel, Integer> filter = new RowFilter<TableModel, Integer>() {
+            @Override
+            public boolean include(RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
+                TableModel model = entry.getModel();
+
+                Object giaValue = model.getValueAt(entry.getIdentifier(), 4);
+                double gia = Double.parseDouble(giaValue.toString());
+                return gia >= minPrice && gia <= maxPrice;
+            }
+        };
+        TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>) jTable3.getRowSorter();
+        if (sorter == null) {
+            sorter = new TableRowSorter<>(jTable3.getModel());
+            jTable3.setRowSorter(sorter);
+        }
+        sorter.setRowFilter(filter);
+        jTable3.setRowSorter(sorter);
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        // TODO add your handling code here:
+        jTable3.setRowSorter(null);
+        jTextField10.setText("");
+        jTextField11.setText("");
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -1380,6 +1423,40 @@ public final class Form_QLSP extends javax.swing.JPanel {
     private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked
         selectImage();
     }//GEN-LAST:event_jLabel16MouseClicked
+
+    private void jComboBox10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox10ActionPerformed
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(((DefaultTableModel) jTable3.getModel()));
+        sorter.setRowFilter(RowFilter.regexFilter(jComboBox10.getSelectedItem().toString()));
+        if (jComboBox10.getSelectedIndex() == 0) {
+            jTable3.setRowSorter(null);
+        } else {
+            jTable3.setRowSorter(sorter);
+        }
+    }//GEN-LAST:event_jComboBox10ActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jComboBox11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox11ActionPerformed
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(((DefaultTableModel) jTable3.getModel()));
+        sorter.setRowFilter(RowFilter.regexFilter(jComboBox11.getSelectedItem().toString()));
+        if (jComboBox11.getSelectedIndex() == 0) {
+            jTable3.setRowSorter(null);
+        } else {
+            jTable3.setRowSorter(sorter);
+        }
+    }//GEN-LAST:event_jComboBox11ActionPerformed
+
+    private void jComboBox12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox12ActionPerformed
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(((DefaultTableModel) jTable3.getModel()));
+        sorter.setRowFilter(RowFilter.regexFilter(jComboBox12.getSelectedItem().toString()));
+        if (jComboBox12.getSelectedIndex() == 0) {
+            jTable3.setRowSorter(null);
+        } else {
+            jTable3.setRowSorter(sorter);
+        }
+    }//GEN-LAST:event_jComboBox12ActionPerformed
 
     void selectImage() {
         JFileChooser fileChooser = new JFileChooser();

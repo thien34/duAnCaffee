@@ -11,6 +11,7 @@ public class SPCTService implements MethodService<SanPhamChiTiet> {
 
     String GET_ALL = "Select * From SanPhamChiTiet";
     String GET_BY_ID = "Select * From SanPhamChiTiet Where IDSPCT = ?";
+    String GET_BY_MASPCT = "Select * From SanPhamChiTiet Where MaSPCT = ?";
     String INSERT = "Insert SanPhamChiTiet(MaSPCT, IDSanPham ,IDKhoiLuong, IDDoRang, IDHuongVi, Anh, SoLuong, Gia, Mota) "
             + "VALUES (?,?,?,?,?,?,?,?,?)";
     String UPDATE = "UPDATE SanPhamChiTiet SET MaSPCT = ?, IDKhoiLuong = ?, IDDoRang = ?, IDHuongVi = ?, Anh = ?, SoLuong = ?, Gia = ?, Mota  = ? WHERE IDSPCT = ?";
@@ -55,6 +56,14 @@ public class SPCTService implements MethodService<SanPhamChiTiet> {
     @Override
     public SanPhamChiTiet getByID(int id) {
         List<SanPhamChiTiet> list = selectBySQL(GET_BY_ID, id);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    public SanPhamChiTiet getByMSPCT(String maspct) {
+        List<SanPhamChiTiet> list = selectBySQL(GET_BY_MASPCT, maspct);
         if (list.isEmpty()) {
             return null;
         }
