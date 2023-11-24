@@ -24,21 +24,21 @@ public class Modal_ChiTietHoaDon extends javax.swing.JDialog {
     /**
      * Creates new form Modal_ChiTietHoaDon
      */
-    public static List<HoaDonChiTiet> list = new ArrayList<>();
+    
     private SPCTService sanPhamService = new SPCTService();
     private SanPhamService phamService = new SanPhamService();
     private ThuocTinhService thuocTinhService = new ThuocTinhService();
-    public static int MA = 0;
+    private int MA;
 
-    public Modal_ChiTietHoaDon() {
-
+    public Modal_ChiTietHoaDon(List<HoaDonChiTiet> hoaDonChiTiet, int ma) {
         initComponents();
-        loadData();
-        jTextField1.setText(String.valueOf(MA));
         
+        this.MA = ma;
+        loadData(hoaDonChiTiet);
+        jTextField1.setText(String.valueOf(MA));
     }
 
-    private void loadData() {
+    private void loadData(List<HoaDonChiTiet> list) {
         DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
         tm.setRowCount(0);
         for (HoaDonChiTiet o : list) {
@@ -52,6 +52,7 @@ public class Modal_ChiTietHoaDon extends javax.swing.JDialog {
                 o.getIdHDCT(), sanPham.getTenSp(), khoiLuong.getValue(),
                 doRang.getValue(), huongVi.getValue(), o.getSoLongMua()});
         }
+
     }
 
     /**
@@ -164,7 +165,7 @@ public class Modal_ChiTietHoaDon extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Modal_ChiTietHoaDon dialog = new Modal_ChiTietHoaDon();
+                Modal_ChiTietHoaDon dialog = new Modal_ChiTietHoaDon(null, 0);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

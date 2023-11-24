@@ -354,13 +354,9 @@ public class Form_QLHoaDon extends javax.swing.JPanel {
         DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
         int row = jTable1.getSelectedRow();
         int ma = (int) tm.getValueAt(row, 0);
-      
+
         List<HoaDonChiTiet> hoaDonChiTiet = hoaDonCTService.getByIDHD(ma);
-        for (HoaDonChiTiet o : hoaDonChiTiet) {
-            Modal_ChiTietHoaDon.list.add(o);
-        }
-        Modal_ChiTietHoaDon.MA = ma;
-        Modal_ChiTietHoaDon modal_ChiTietHoaDon = new Modal_ChiTietHoaDon();
+        Modal_ChiTietHoaDon modal_ChiTietHoaDon = new Modal_ChiTietHoaDon(hoaDonChiTiet, ma);
         modal_ChiTietHoaDon.setVisible(true);
         modal_ChiTietHoaDon.setLocationRelativeTo(this);
     }//GEN-LAST:event_jButton1ActionPerformed
