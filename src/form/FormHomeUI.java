@@ -509,11 +509,13 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
 // Thông tin khách hàng
             Paragraph thongTinKH = new Paragraph("Thong tin khach hang", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14));
             thongTinKH.setAlignment(Element.ALIGN_CENTER);
+            document.add(thongTinKH);
             Paragraph tenKH = new Paragraph("Ten khach hang: " + jTextField3.getText());
             tenKH.setAlignment(Element.ALIGN_CENTER);
+            document.add(tenKH);
             Paragraph sdtKH = new Paragraph("SDT: " + jTextField2.getText());
             sdtKH.setAlignment(Element.ALIGN_CENTER);
-
+            document.add(sdtKH);
             document.add(new Chunk(line));
 
 // Thông tin hóa đơn
