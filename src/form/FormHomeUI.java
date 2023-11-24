@@ -493,7 +493,7 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
             // Open the PDF document.
             document.open();
 // Tiêu đề Hóa đơn
-            Paragraph title = new Paragraph("HÓA ĐƠN", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18));
+            Paragraph title = new Paragraph("HOA DON", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18));
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
 
@@ -506,25 +506,19 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
             LineSeparator line = new LineSeparator();
             line.setLineColor(new BaseColor(0, 0, 0, 68)); // Màu đen nhạt
             document.add(new Chunk(line));
-            PdfPCell cell = null;
 // Thông tin khách hàng
-            cell = new PdfPCell(new Paragraph("Thông tin khách hàng", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
-            cell.setColspan(3);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(cell);
+            Paragraph thongTinKH = new Paragraph("Thong tin khach hang", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14));
+            thongTinKH.setAlignment(Element.ALIGN_CENTER);
+            Paragraph tenKH = new Paragraph("Ten khach hang: " + jTextField3.getText());
+            tenKH.setAlignment(Element.ALIGN_CENTER);
+            Paragraph sdtKH = new Paragraph("SDT: " + jTextField2.getText());
+            sdtKH.setAlignment(Element.ALIGN_CENTER);
 
-            table.addCell("Tên khách hàng:");
-            table.addCell("null");
-            table.addCell("Phone:");
-            table.addCell("null");
-            table.addCell("Address:");
-            table.addCell("null");
-
-// Thêm một dòng đối tượng LineSeparator ở giữa để phân chia thông tin khách hàng và thông tin hóa đơn
             document.add(new Chunk(line));
 
 // Thông tin hóa đơn
-            cell = new PdfPCell(new Paragraph("Thông tin hóa đơn", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
+            PdfPCell cell = null;
+            cell = new PdfPCell(new Paragraph("Thong tin hoa don", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14)));
             cell.setColspan(3);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
@@ -538,7 +532,7 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
             document.add(new Chunk(line));
 
 // Thêm lời cảm ơn
-            Paragraph thankYou = new Paragraph("Cảm ơn quý khách rất nhiều!", FontFactory.getFont(FontFactory.HELVETICA, 12));
+            Paragraph thankYou = new Paragraph("Cam on quy khach!", FontFactory.getFont(FontFactory.HELVETICA, 12));
             thankYou.setAlignment(Element.ALIGN_CENTER);
             document.add(thankYou);
             document.close();
@@ -554,15 +548,15 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
         }
 
         KhachHang khachHang = hangServiceV1.getBySDT(jTextField2.getText());
-        
+
         String temp = "";
-            String[] arStr = jLabel2.getText().split("\\.");
-            for (String item : arStr) {
-                temp += item;
-            }
-            temp = temp.replace(",", ""); // Loại bỏ dấu phẩy trong chuỗi
-            int value = Integer.parseInt(temp);
-            
+        String[] arStr = jLabel2.getText().split("\\.");
+        for (String item : arStr) {
+            temp += item;
+        }
+        temp = temp.replace(",", ""); // Loại bỏ dấu phẩy trong chuỗi
+        int value = Integer.parseInt(temp);
+
         if (khachHang == null) {
             hangServiceV1.create(KhachHang.builder()
                     .sdt(jTextField2.getText())
