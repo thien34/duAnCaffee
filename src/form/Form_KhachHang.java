@@ -547,12 +547,10 @@ public class Form_KhachHang extends javax.swing.JPanel {
         jTextField1.setText("");
         jTextField2.setText("");
         jTextField3.setText("");
-
         jDateChooser1.setDate(null);
         jTextField4.setText("");
         jTextField6.setText("");
         jTextField5.setText("");
-
         jTextField7.setText("");
     }
 

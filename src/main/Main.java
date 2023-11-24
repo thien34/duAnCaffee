@@ -59,7 +59,7 @@ public class Main extends javax.swing.JFrame {
         if (key.equalsIgnoreCase("ThanhPhan")) {
             
             initComponents();
-            titleBar1.initJFram(this);
+            titleBar1.initJFram(Main.main);
             setBackground(new Color(0, 0, 0, 0));
             menu.initMoving(Main.this);
             menu.addEventMenuSelected((var index) -> {
@@ -90,7 +90,7 @@ public class Main extends javax.swing.JFrame {
         if (key.equalsIgnoreCase("ThuongHieu")) {
             
             initComponents();
-            titleBar1.initJFram(this);
+            titleBar1.initJFram(Main.main);
             setBackground(new Color(0, 0, 0, 0));
             menu.initMoving(Main.this);
             menu.addEventMenuSelected((var index) -> {

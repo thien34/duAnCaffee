@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package services;
 
 import entity.KhachHang;
@@ -10,10 +6,6 @@ import ultis.DBContext;
 import java.sql.*;
 import java.util.ArrayList;
 
-/**
- *
- * @author ACER
- */
 public class KhachHangServiceV1 extends DBContext {
 
     public List<KhachHang> getAll() {
@@ -34,10 +26,39 @@ public class KhachHangServiceV1 extends DBContext {
                 khachHang.setCapBac(rs.getString(8));
                 list.add(khachHang);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public KhachHang getBySDT(String sdt) {
+        String sql = "SELECT * FROM KhachHang WHERE SDT = ?";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, sdt);
+
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    KhachHang khachHang = new KhachHang();
+                    khachHang.setId(rs.getInt("IDKhachHang"));
+                    khachHang.setTen(rs.getString("Ten"));
+                    khachHang.setSdt(rs.getString("SDT"));
+                    khachHang.setNgaySinh(rs.getDate("NgaySinh").toString());
+                    khachHang.setDiaChi(rs.getString("DiaChi"));
+                    khachHang.setEmail(rs.getString("email"));
+                    khachHang.setTichDiem(rs.getInt("TichDiem"));
+                    khachHang.setCapBac(rs.getString("CapBac"));
+                    return khachHang;
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public void create(KhachHang khachHang) {
@@ -56,7 +77,7 @@ public class KhachHangServiceV1 extends DBContext {
             e.printStackTrace();
         }
     }
-
+    
     public void update(KhachHang khachHang, Integer id) {
         try {
             String sql = "UPDATE KhachHang SET Ten=?, SDT=?, NgaySinh=?, DiaChi=?, Email=?  WHERE IDKhachHang=?";
@@ -67,6 +88,18 @@ public class KhachHangServiceV1 extends DBContext {
             statement.setString(4, khachHang.getDiaChi());
             statement.setString(5, khachHang.getEmail());
             statement.setInt(6, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateDiem(KhachHang khachHang, Integer id) {
+        try {
+            String sql = "UPDATE KhachHang SET TichDiem = ? WHERE IDKhachHang = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, khachHang.getTichDiem());
+            statement.setInt(2, id);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
