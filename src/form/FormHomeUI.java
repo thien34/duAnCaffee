@@ -66,11 +66,16 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
                     for (String item : arStr) {
                         temp += item;
                     }
-                    System.out.println("t: " + temp);
-                    if (Integer.valueOf(jTextField1.getText()) <= Integer.valueOf(temp)) {
+                    temp = temp.replace(",", ""); // Loại bỏ dấu phẩy trong chuỗi
+                    int value = Integer.parseInt(temp);
+                    String formattedValue = String.format("t: %,.0f", (double) value);
+                    System.out.println(formattedValue);
+
+                    int input = Integer.parseInt(jTextField1.getText()); // Giá trị nhập từ jTextField1
+                    if (input <= value) {
                         jLabel5.setText("0");
                     } else {
-                        int tienTra = Integer.valueOf(jTextField1.getText()) - Integer.valueOf(temp);
+                        int tienTra = input - value;
                         DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
                         dfs.setDecimalSeparator('.');
                         DecimalFormat df = new DecimalFormat("#,##0", dfs);
@@ -164,11 +169,13 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
         for (String item : arStr) {
             temp += item;
         }
+        temp = temp.replace(",", ""); // Loại bỏ dấu phẩy trong chuỗi
+
         return HoaDon.builder()
                 .idNhanVien(1)
                 .trangThai("Thanh toán thành công")
                 .ngayMua(dateFormat.format(date))
-                .tien(Integer.valueOf(temp))
+                .tien(Integer.parseInt(temp)) // Chuyển đổi chuỗi thành số nguyên
                 .build();
     }
 

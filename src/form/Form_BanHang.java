@@ -63,6 +63,7 @@ public class Form_BanHang extends javax.swing.JPanel {
             }
         });
         for (SanPhamChiTiet o : cTService.getAll()) {
+            System.out.println(o);
             home.addItem(o);
         }
     }
