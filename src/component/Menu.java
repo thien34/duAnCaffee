@@ -115,7 +115,6 @@ public class Menu extends javax.swing.JPanel {
                 x = me.getX();
                 y = me.getY();
             }
-
         });
         panelMoving.addMouseMotionListener(new MouseMotionAdapter() {
             @Override

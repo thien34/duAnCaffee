@@ -98,6 +98,7 @@ public final class Form_ThanhPhan extends javax.swing.JPanel {
         });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 102, 51));
         jLabel2.setText("Quản Lý Thành Phần");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

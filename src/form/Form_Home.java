@@ -10,7 +10,7 @@ import services.HoaDonServiceV2;
 
 public class Form_Home extends javax.swing.JPanel {
 
-    private HoaDonServiceV2 donServiceV2 = new HoaDonServiceV2();
+    private final HoaDonServiceV2 donServiceV2 = new HoaDonServiceV2();
 
     public Form_Home() {
         initComponents();
