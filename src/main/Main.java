@@ -59,13 +59,9 @@ public class Main extends javax.swing.JFrame {
         main.dispose();
         main = this;
         if (key.equalsIgnoreCase("ThanhPhan")) {
-
             initComponents();
-
             titleBar1.initJFram(Main.main);
             jLabel2.setText(SessionTaiKhoan.getNhanVien() != null ? SessionTaiKhoan.getNhanVien().getHoTen() : "");
-            titleBar1.initJFram(this);
-
             setBackground(new Color(0, 0, 0, 0));
             menu.initMoving(Main.this);
             menu.addEventMenuSelected((var index) -> {
@@ -94,11 +90,10 @@ public class Main extends javax.swing.JFrame {
             setForm(new Form_ThanhPhan());
         }
         if (key.equalsIgnoreCase("ThuongHieu")) {
-
             initComponents();
             titleBar1.initJFram(Main.main);
             jLabel2.setText(SessionTaiKhoan.getNhanVien() != null ? SessionTaiKhoan.getNhanVien().getHoTen() : "");
-            titleBar1.initJFram(this);
+            setBackground(new Color(0, 0, 0, 0));
             menu.initMoving(Main.this);
             menu.addEventMenuSelected((var index) -> {
                 System.out.println(index);
