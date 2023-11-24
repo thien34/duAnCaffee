@@ -1,6 +1,7 @@
 package main;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import entity.SessionTaiKhoan;
 import form.Form_QLSP;
 import form.Form_BanHang;
 import form.Form_QLHoaDon;
@@ -16,12 +17,13 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class Main extends javax.swing.JFrame {
-    
+
     private static Main main;
-    
+
     public Main() {
-        
+
         initComponents();
+        jLabel2.setText(SessionTaiKhoan.getNhanVien() != null ? SessionTaiKhoan.getNhanVien().getHoTen() : "");
         main = this;
         titleBar1.initJFram(Main.main);
         setBackground(new Color(0, 0, 0, 0));
@@ -52,13 +54,14 @@ public class Main extends javax.swing.JFrame {
         });
         setForm(new Form_Home());
     }
-    
+
     public Main(String key) {
         main.dispose();
         main = this;
         if (key.equalsIgnoreCase("ThanhPhan")) {
-            
+
             initComponents();
+            jLabel2.setText(SessionTaiKhoan.getNhanVien() != null ? SessionTaiKhoan.getNhanVien().getHoTen() : "");
             titleBar1.initJFram(this);
             setBackground(new Color(0, 0, 0, 0));
             menu.initMoving(Main.this);
@@ -88,8 +91,9 @@ public class Main extends javax.swing.JFrame {
             setForm(new Form_ThanhPhan());
         }
         if (key.equalsIgnoreCase("ThuongHieu")) {
-            
+
             initComponents();
+            jLabel2.setText(SessionTaiKhoan.getNhanVien() != null ? SessionTaiKhoan.getNhanVien().getHoTen() : "");
             titleBar1.initJFram(this);
             setBackground(new Color(0, 0, 0, 0));
             menu.initMoving(Main.this);
@@ -119,14 +123,14 @@ public class Main extends javax.swing.JFrame {
             setForm(new Form_ThuongHieuV2());
         }
     }
-    
+
     private void setForm(JComponent com) {
         mainPanel.removeAll();
         mainPanel.add(com);
         mainPanel.repaint();
         mainPanel.revalidate();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

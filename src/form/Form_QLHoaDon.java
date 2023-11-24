@@ -2,6 +2,7 @@ package form;
 
 import entity.FormEmail;
 import entity.HoaDon;
+import entity.HoaDonChiTiet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,12 +13,14 @@ import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import services.HoaDonCTService;
 import services.HoaDonService;
 import ultis.EmailService;
 
 public class Form_QLHoaDon extends javax.swing.JPanel {
 
     private final HoaDonService hoaDonService = new HoaDonService();
+    private HoaDonCTService hoaDonCTService = new HoaDonCTService();
 
     int tongTien = 0;
 
@@ -32,13 +35,13 @@ public class Form_QLHoaDon extends javax.swing.JPanel {
     private void loadDataHoaDonV1() {
         DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
         tm.setRowCount(0);
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(jTable1.getModel());
-        jTable1.setRowSorter(sorter);
-
-        List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
-        sortKeys.add(new RowSorter.SortKey(5, SortOrder.ASCENDING));
-
-        sorter.setSortKeys(sortKeys);
+//        TableRowSorter<TableModel> sorter = new TableRowSorter<>(jTable1.getModel());
+//        jTable1.setRowSorter(sorter);
+//
+//        List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
+//        sortKeys.add(new RowSorter.SortKey(5, SortOrder.ASCENDING));
+//
+//        sorter.setSortKeys(sortKeys);
         for (HoaDon o : hoaDonService.getAll()) {
             tm.addRow(new Object[]{
                 o.getIdHoaDon(), o.getIdNhanVien(), o.getIdKhachHang(),
@@ -278,6 +281,11 @@ public class Form_QLHoaDon extends javax.swing.JPanel {
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setText("Chi Tiết Hóa Đơn");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -340,6 +348,22 @@ public class Form_QLHoaDon extends javax.swing.JPanel {
             System.out.println(ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel tm = (DefaultTableModel) jTable1.getModel();
+        int row = jTable1.getSelectedRow();
+        int ma = (int) tm.getValueAt(row, 0);
+      
+        List<HoaDonChiTiet> hoaDonChiTiet = hoaDonCTService.getByIDHD(ma);
+        for (HoaDonChiTiet o : hoaDonChiTiet) {
+            Modal_ChiTietHoaDon.list.add(o);
+        }
+        Modal_ChiTietHoaDon.MA = ma;
+        Modal_ChiTietHoaDon modal_ChiTietHoaDon = new Modal_ChiTietHoaDon();
+        modal_ChiTietHoaDon.setVisible(true);
+        modal_ChiTietHoaDon.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
