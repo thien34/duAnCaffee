@@ -25,6 +25,7 @@ import swing.TableActionCellEditer;
 import swing.TableActionCellRender;
 import event.TableActionEvent;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -45,34 +46,49 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
         scroll.setVerticalScrollBar(new ScrollBar());
         list = hoaDonCTService.getByIDHD(Integer.parseInt(jLabel7.getText()));
         event1 = (int row) -> {
+            int sumMoney = 0;
             hoaDonCTService.remove(list.get(row).getIdHDCT());
             initModel(hoaDonCTService.getByIDHD(Integer.parseInt(jLabel7.getText())));
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                sumMoney += Integer.valueOf(jTable1.getValueAt(i, 2).toString());
+            }
+            DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
+            dfs.setDecimalSeparator('.');
+            DecimalFormat df = new DecimalFormat("#,##0", dfs);
+            jLabel2.setText(df.format(sumMoney));
         };
-        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                String temp = "";
-                String[] arStr = jLabel2.getText().split("\\.");
-                for (String item : arStr) {
-                    temp += item;
+        try {
+            jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    String temp = "";
+                    String[] arStr = jLabel2.getText().split("\\.");
+                    for (String item : arStr) {
+                        temp += item;
+                    }
+                    System.out.println("t: " + temp);
+                    if (Integer.valueOf(jTextField1.getText()) <= Integer.valueOf(temp)) {
+                        jLabel5.setText("0");
+                    } else {
+                        int tienTra = Integer.valueOf(jTextField1.getText()) - Integer.valueOf(temp);
+                        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
+                        dfs.setDecimalSeparator('.');
+                        DecimalFormat df = new DecimalFormat("#,##0", dfs);
+                        jLabel5.setText(df.format(tienTra));
+                    }
                 }
-                if (Integer.valueOf(jTextField1.getText()) <= Integer.valueOf(temp)) {
-                    jLabel5.setText("0");
-                } else {
-                    int tienTra = Integer.valueOf(jTextField1.getText()) - Integer.valueOf(temp);
-                    DecimalFormat df = new DecimalFormat("#,##0");
-                    jLabel5.setText(df.format(tienTra));
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
                 }
-            }
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-            }
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                }
+            });
+        } catch (Exception e) {
+        }
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-            }
-        });
     }
 
     public void setEvent(EventItem event) {
@@ -125,7 +141,9 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             sumMoney += Integer.valueOf(jTable1.getValueAt(i, 2).toString());
         }
-        DecimalFormat df = new DecimalFormat("#,##0");
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
+        dfs.setDecimalSeparator('.');
+        DecimalFormat df = new DecimalFormat("#,##0", dfs);
         jLabel2.setText(df.format(sumMoney));
     }
 
