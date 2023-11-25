@@ -76,6 +76,10 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
             dfs.setDecimalSeparator('.');
             DecimalFormat df = new DecimalFormat("#,##0", dfs);
             jLabel2.setText(df.format(sumMoney));
+            panelItem.removeAll();
+            for (SanPhamChiTiet o : cTService.getAll()) {
+                this.addItem(o);
+            }
         };
         try {
             jTextField1.getDocument().addDocumentListener(new DocumentListener() {
@@ -116,11 +120,14 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
                     KhachHang khachHang = hangServiceV1.getBySDT(jTextField2.getText());
                     if (khachHang != null) {
                         jTextField3.setText(khachHang.getTen());
+                    } else {
+                        jTextField3.setText("");
                     }
                 }
 
                 @Override
                 public void removeUpdate(DocumentEvent e) {
+                    jTextField3.setText("");
                 }
 
                 @Override
@@ -484,7 +491,35 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        if (Integer.valueOf(jLabel7.getText()) == 0) {
+            MsgHelper.alert(this, "Không thanh toán được");
+            return;
+        }
+        if (jTable1.getRowCount() <= 0) {
+            MsgHelper.alert(this, "Thêm sản phẩm");
+            return;
+        }
+        if (jTextField3.getText().isBlank()) {
+            MsgHelper.alert(this, "Điển thông tin khách hàng");
+            return;
+        }
+        if (jTextField1.getText().isBlank()) {
+            MsgHelper.alert(this, "Điển tiền khách trả");
+            return;
+        }
+        String temp = "";
+        String[] arStr = jLabel2.getText().split("\\.");
+        for (String item : arStr) {
+            temp += item;
+        }
+        temp = temp.replace(",", ""); // Loại bỏ dấu phẩy trong chuỗi
+        int value = Integer.parseInt(temp);
+        String formattedValue = String.format("t: %,.0f", (double) value);
+        int input = Integer.parseInt(jTextField1.getText()); // Giá trị nhập từ jTextField1
+        if (input < value) {
+            MsgHelper.alert(this, "Không đủ tiền");
+            return;
+        }
 // Create a new PDF document.
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);
         document.open();
@@ -524,9 +559,15 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
             cell.setColspan(3);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
-
-            table.addCell("Loại Sản phẩm:");
-            table.addCell("null");
+            int check = jTable1.getRowCount();
+            table.addCell("Ten san pham");
+            table.addCell("So luong");
+            table.addCell("Gia");
+            for (int i = 0; i < check; i++) {
+                table.addCell(jTable1.getValueAt(i, 0).toString());
+                table.addCell(jTable1.getValueAt(i, 1).toString());
+                table.addCell(jTable1.getValueAt(i, 2).toString());
+            }
 
             document.add(table);
 
@@ -551,14 +592,6 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
 
         KhachHang khachHang = hangServiceV1.getBySDT(jTextField2.getText());
 
-        String temp = "";
-        String[] arStr = jLabel2.getText().split("\\.");
-        for (String item : arStr) {
-            temp += item;
-        }
-        temp = temp.replace(",", ""); // Loại bỏ dấu phẩy trong chuỗi
-        int value = Integer.parseInt(temp);
-
         if (khachHang == null) {
             hangServiceV1.create(KhachHang.builder()
                     .sdt(jTextField2.getText())
@@ -576,6 +609,8 @@ public final class FormHomeUI extends javax.swing.JPanel implements ItemClickLis
         jLabel2.setText("0");
         jLabel5.setText("0");
         jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
         jLabel7.setText("0");
         jLabel8.setText("00/00/0000");
         ischeckHD = true;

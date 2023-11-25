@@ -1,5 +1,6 @@
 package form;
 
+import entity.KhachHang;
 import entity.SanPham;
 import entity.SanPhamChiTiet;
 import entity.ThuocTinh;
@@ -10,6 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -17,6 +20,7 @@ import services.SPCTService;
 import services.SanPhamService;
 import services.ThuocTinhService;
 import ultis.ImageHelper;
+import ultis.MsgHelper;
 
 public final class Form_QLSP extends javax.swing.JPanel {
 
@@ -29,7 +33,48 @@ public final class Form_QLSP extends javax.swing.JPanel {
         loadData();
         loadDataJcombox();
         loadDataSanPham();
+        jButton2.setEnabled(false);
         loadDataSPCT(cTService.getAll());
+        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                SanPham sanPham = sanPhamService.getByMaSP(jTextField1.getText());
+                if (sanPham.getId() != null) {
+                    ThuocTinh thuocHieu = thuocTinhService.getThuocTinhById(sanPham.getIdThuongHieu(), "ThuongHieu");
+                    ThuocTinh thanhPhan = thuocTinhService.getThuocTinhById(sanPham.getIdThanhPhan(), "ThanhPhan");
+                    jTextField2.setText(sanPham.getTenSp());
+                    jTextField4.setText(sanPham.getMoTa());
+                    jComboBox1.setSelectedItem(thuocHieu.getValue());
+                    jComboBox2.setSelectedItem(thanhPhan.getValue());
+                    jComboBox3.setSelectedItem(sanPham.getTinhTrang() ? "Hoạt Động" : "Ngừng Hoạt Động");
+                    jButton1.setEnabled(false);
+                    jButton2.setEnabled(true);
+                } else {
+                    jButton1.setEnabled(true);
+                    jButton2.setEnabled(true);
+                    jTextField2.setText("");
+                    jTextField4.setText("");
+                    jComboBox1.setSelectedIndex(-1);
+                    jComboBox2.setSelectedIndex(-1);
+                    jComboBox3.setSelectedIndex(-1);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                jButton1.setEnabled(true);
+                jButton2.setEnabled(true);
+                jTextField2.setText("");
+                jTextField4.setText("");
+                jComboBox1.setSelectedIndex(-1);
+                jComboBox2.setSelectedIndex(-1);
+                jComboBox3.setSelectedIndex(-1);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
     }
 
     private void mouseClickSanPham(int row) {
@@ -1156,7 +1201,6 @@ public final class Form_QLSP extends javax.swing.JPanel {
             SanPham sp = sanPhamService.getByMaSP(jTextField1.getText());
             loadDataSPCT(cTService.getByIDSP(sp.getId()));
         }
-
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
@@ -1256,7 +1300,6 @@ public final class Form_QLSP extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
         jTextField3.setText("");
     }//GEN-LAST:event_jButton8ActionPerformed
 
@@ -1265,33 +1308,55 @@ public final class Form_QLSP extends javax.swing.JPanel {
 //            JOptionPane.showMessageDialog(this, validateData());
 //            return;
 //        }
-        sanPhamService.addSanPham(readSanPham());
-        loadDataSanPham();
-        readSanPham();
+        try {
+            sanPhamService.addSanPham(readSanPham());
+            loadDataSanPham();
+            readSanPham();
+            MsgHelper.alert(this, "Thêm thành công");
+            jTextField1.setText("");
+            jTextField2.setText("");
+            jTextField4.setText("");
+            jComboBox1.setSelectedIndex(-1);
+            jComboBox2.setSelectedIndex(-1);
+            jComboBox3.setSelectedIndex(-1);
+        } catch (Exception e) {
+            MsgHelper.alert(this, "Thêm thất bại");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        // TODO add your handling code here:
         int row = jTable1.getSelectedRow();
         mouseClickSanPham(row);
         jTextField1.setEditable(false);
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        int row = jTable1.getSelectedRow();
-        if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần sửa!!!");
-            return;
-        }
+        try {
+            if (MsgHelper.confirm(this, "Bạn có muốn sửa không?") == true) {
+                int row = jTable1.getSelectedRow();
+                if (row < 0) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần sửa!!!");
+                    return;
+                }
 
-        SanPham sanPham = readSanPham();
-        sanPhamService.updateSanPham(sanPham, jTextField1.getText());
-        loadDataSanPham();
+                SanPham sanPham = readSanPham();
+                sanPhamService.updateSanPham(sanPham, jTextField1.getText());
+                loadDataSanPham();
+                MsgHelper.alert(this, "Sửa thành công");
+                jTextField1.setText("");
+                jTextField2.setText("");
+                jTextField4.setText("");
+                jComboBox1.setSelectedIndex(-1);
+                jComboBox2.setSelectedIndex(-1);
+                jComboBox3.setSelectedIndex(-1);
+            }
+        } catch (HeadlessException e) {
+            MsgHelper.alert(this, "Sửa thất bại");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
@@ -1351,16 +1416,28 @@ public final class Form_QLSP extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField9ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        cTService.add(readDataSPCT());
-        loadDataSPCT(cTService.getAll());
-        jButton11ActionPerformed(evt);
+        try {
+            cTService.add(readDataSPCT());
+            loadDataSPCT(cTService.getAll());
+            jButton11ActionPerformed(evt);
+            MsgHelper.alert(this, "Thêm thành công");
+        } catch (Exception e) {
+            MsgHelper.alert(this, "Thêm thất bại");
+        }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        SanPhamChiTiet chiTiet = cTService.getAll().get(jTable3.getSelectedRow());
-        cTService.update(readDataSPCT(), chiTiet.getId());
-        loadDataSPCT(cTService.getAll());
-        jButton11ActionPerformed(evt);
+        try {
+            if (MsgHelper.confirm(this, "Bạn có muốn sửa không?") == true) {
+                SanPhamChiTiet chiTiet = cTService.getAll().get(jTable3.getSelectedRow());
+                cTService.update(readDataSPCT(), chiTiet.getId());
+                loadDataSPCT(cTService.getAll());
+                jButton11ActionPerformed(evt);
+                MsgHelper.alert(this, "Sửa thành công");
+            }
+        } catch (Exception e) {
+            MsgHelper.alert(this, "Sửa thất bại");
+        }
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed

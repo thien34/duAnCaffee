@@ -65,10 +65,11 @@ public class SanPhamService extends DBContext {
                 sanPham.setIdThanhPhan(rs.getInt("idthanhphan"));
                 sanPham.setMoTa(rs.getString("mota"));
             }
+            return sanPham;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return sanPham;
+        return null;
     }
 
     public SanPham getByID(int id) {

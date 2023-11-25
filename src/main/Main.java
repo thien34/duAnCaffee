@@ -13,8 +13,10 @@ import form.Form_ThuongHieuV2;
 
 import java.awt.Color;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import ultis.MsgHelper;
 
 public class Main extends javax.swing.JFrame {
 
@@ -46,8 +48,11 @@ public class Main extends javax.swing.JFrame {
                     setForm(new Form_ThuongHieuV2());
                 case 10 ->
                     setForm(new Form_ThanhPhan());
-                case 11 ->
-                    System.exit(0);
+                case 11 -> {
+                    if (MsgHelper.confirm(this, "Thoát không?")) {
+                        System.exit(0);
+                    }
+                }
                 default -> {
                 }
             }
